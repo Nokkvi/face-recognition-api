@@ -2,12 +2,24 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
-const db = require('knex')({
-  client: 'pg',
-  connection: {
+
+let connection = {};
+if(process.env.NODE_ENV === 'production') {
+  connection = {
     host : process.env.DATABASE_URL,
     ssl: true,
   }
+} else {
+  connection = {
+    host : '127.0.0.1',
+    user: '',
+    password: '',
+    database: ''
+  }
+}
+const db = require('knex')({
+  client: 'pg',
+  connection: connection
 });
 
 const register = require('./controllers/register');
