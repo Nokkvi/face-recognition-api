@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const morgan = require('morgan');
 
 let connection = {};
 if(process.env.NODE_ENV === 'production') {
@@ -21,7 +22,6 @@ const db = require('knex')({
   client: 'pg',
   connection: connection
 });
-
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
@@ -30,6 +30,7 @@ const image = require('./controllers/image');
 const app = express();
 
 app.use(bodyParser.json());
+app.use(morgan('combined'))
 app.use (cors());
 
 app.get('/', (req, res) => {
