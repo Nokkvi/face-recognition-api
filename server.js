@@ -12,15 +12,16 @@ if(process.env.NODE_ENV === 'production') {
   }
 } else {
   connection = {
-    host : '127.0.0.1',
-    user: '',
-    password: '',
-    database: ''
+    host : process.env.POSTGRES_HOST,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB
   }
 }
+console.log("URI", process.env.POSTGRES_URI)
 const db = require('knex')({
   client: 'pg',
-  connection: connection
+  connection: process.env.POSTGRES_URI
 });
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
