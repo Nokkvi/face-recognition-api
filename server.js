@@ -28,6 +28,7 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
+const signout = require('./controllers/signout');
 
 const app = express();
 
@@ -40,6 +41,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/signin', signin.signinAuthentication(db, bcrypt))
+
+app.post('/signout', auth.requireAuth, signout.handleSignOut())
 
 app.post('/register', (req, res) => {register.handleRegister(req, res, db ,bcrypt)})
 
