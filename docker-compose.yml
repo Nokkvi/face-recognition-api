@@ -15,6 +15,7 @@ services:
       CLARIFAIAPIKEY: ${CLARIFAIAPIKEY}
       PORT: ${BACKEND_PORT}
       POSTGRES_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/face-recognition
+      REDIS_URI: redis://redis:6379
   # Postgres
   postgres: 
     container_name: postgres
@@ -26,3 +27,8 @@ services:
       POSTGRES_HOST: postgres
     ports: 
       - "5432:5432"
+  redis:
+    container_name: redis
+    image: "redis"
+    ports:
+      - "6379:6379"

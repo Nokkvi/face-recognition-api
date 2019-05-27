@@ -27,6 +27,8 @@ const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
+const auth = require('./controllers/authorization');
+const signout = require('./controllers/signout');
 
 const app = express();
 
@@ -38,17 +40,19 @@ app.get('/', (req, res) => {
 	res.send('It is working!');
 })
 
-app.post('/signin', (req, res) => {signin.handleSignin(req, res, db, bcrypt)})
+app.post('/signin', signin.signinAuthentication(db, bcrypt))
+
+app.post('/signout', auth.requireAuth, signout.handleSignOut())
 
 app.post('/register', (req, res) => {register.handleRegister(req, res, db ,bcrypt)})
 
-app.get('/profile/:id', (req, res) => {profile.handleProfileGet(req, res, db)})
+app.get('/profile/:id', auth.requireAuth, (req, res) => {profile.handleProfileGet(req, res, db)})
 
-app.put('/profile/:id', (req, res) => {profile.handleProfileUpdate(req, res, db)})
+app.put('/profile/:id', auth.requireAuth, (req, res) => {profile.handleProfileUpdate(req, res, db)})
 
-app.put('/image', (req, res) => {image.handleImage(req, res, db)})
+app.put('/image', auth.requireAuth, (req, res) => {image.handleImage(req, res, db)})
 
-app.post('/image', (req, res) => {image.handleApiCall(req, res)})
+app.post('/image', auth.requireAuth, (req, res) => {image.handleApiCall(req, res)})
 
 const PORT = process.env.PORT;
 app.listen(PORT || 3000, () => {

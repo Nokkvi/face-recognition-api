@@ -1,3 +1,5 @@
+const utils = require('../utils');
+
 const handleRegister = (req, res, db ,bcrypt) => {
 	const { email, password, name} = req.body;
 	if (!email || !name || !password) {
@@ -19,9 +21,8 @@ const handleRegister = (req, res, db ,bcrypt) => {
 				name: name,
 				joined: new Date()
 			})
-				.then(user => {
-					res.json(user[0])
-				})
+				.then(user => utils.createSession(user[0]))
+				.then(session => res.json(session))
   	})
   	.then(trx.commit)
   	.catch(trx.rollback)
@@ -31,5 +32,5 @@ const handleRegister = (req, res, db ,bcrypt) => {
 }
 
 module.exports = {
-	handleRegister: handleRegister
+	handleRegister
 }
